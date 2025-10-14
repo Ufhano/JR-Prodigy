@@ -32,19 +32,19 @@ export function ContactUs() {
     {
       icon: <Mail className="w-6 h-6 text-primary" />,
       title: "Email",
-      detail: "contact@jrprodigy.com",
-      link: "mailto:contact@jrprodigy.com",
+      detail: "rodney@jrpv.co.za",
+      link: "mailto:rodney@jrpv.co.za",
     },
     {
       icon: <Phone className="w-6 h-6 text-primary" />,
       title: "Phone",
-      detail: "+1 (555) 123-4567",
-      link: "tel:+15551234567",
+      detail: "+27 (81) 487 3585",
+      link: "tel:+27814873585",
     },
     {
       icon: <MapPin className="w-6 h-6 text-primary" />,
       title: "Address",
-      detail: "123 Innovation Drive, Tech Valley, CA 94025",
+      detail: "9 Macon Gardens. Macon Road, Port Elizabeth, Eastern Cape",
       link: null,
     },
     {
@@ -61,8 +61,8 @@ export function ContactUs() {
       <section className="text-center space-y-4">
         <h1>Contact Us</h1>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          Have questions about our smart water meters? We're here to help.
-          Reach out to our team and we'll get back to you as soon as possible.
+          Have questions about our smart water meters? We're here to help. Reach
+          out to our team and we'll get back to you as soon as possible.
         </p>
       </section>
 
@@ -206,8 +206,8 @@ export function ContactUs() {
             <div className="space-y-2">
               <h4>What's the warranty period?</h4>
               <p className="text-sm text-muted-foreground">
-                All JR Prodigy meters come with a 5-year warranty covering
-                parts and labor.
+                All JR Prodigy meters come with a 5-year warranty covering parts
+                and labor.
               </p>
             </div>
             <div className="space-y-2">

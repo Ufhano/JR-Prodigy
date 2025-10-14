@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Droplets, Bell, Settings, LayoutDashboard, Info, Mail } from "lucide-react";
+import {
+  Droplets,
+  Bell,
+  Settings,
+  LayoutDashboard,
+  Info,
+  Mail,
+} from "lucide-react";
 import { Dashboard } from "./components/Dashboard";
 import { About } from "./components/About";
 import { ContactUs } from "./components/ContactUs";
@@ -154,10 +161,10 @@ export default function App() {
             <div>
               <h4 className="mb-4">Contact Info</h4>
               <div className="space-y-2 text-sm text-muted-foreground">
-                <p>contact@jrprodigy.com</p>
-                <p>+1 (555) 123-4567</p>
-                <p>123 Innovation Drive</p>
-                <p>Tech Valley, CA 94025</p>
+                <p>rodney@jrpv.co.za</p>
+                <p>+27 (81) 487 3585</p>
+                <p>9 Macon Gardens. Macon Road</p>
+                <p>Port Elizabeth, Eastern Cape</p>
               </div>
             </div>
           </div>
