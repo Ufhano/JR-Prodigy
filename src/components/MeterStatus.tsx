@@ -1,74 +1,9 @@
+import { useEffect, useState } from "react";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { ScrollArea } from "./ui/scroll-area";
 import { Droplets } from "lucide-react";
-
-interface Meter {
-  id: string;
-  location: string;
-  status: "active" | "warning" | "offline";
-  lastReading: string;
-  consumption: number;
-}
-
-const meters: Meter[] = [
-  {
-    id: "WM-1001",
-    location: "Building A - Floor 3",
-    status: "active",
-    lastReading: "2 min ago",
-    consumption: 1245,
-  },
-  {
-    id: "WM-1002",
-    location: "Building B - Floor 1",
-    status: "active",
-    lastReading: "5 min ago",
-    consumption: 987,
-  },
-  {
-    id: "WM-1003",
-    location: "Building C - Floor 2",
-    status: "warning",
-    lastReading: "1 hour ago",
-    consumption: 2134,
-  },
-  {
-    id: "WM-1004",
-    location: "Building A - Floor 1",
-    status: "active",
-    lastReading: "3 min ago",
-    consumption: 765,
-  },
-  {
-    id: "WM-1005",
-    location: "Building D - Floor 4",
-    status: "offline",
-    lastReading: "2 days ago",
-    consumption: 0,
-  },
-  {
-    id: "WM-1006",
-    location: "Building B - Floor 3",
-    status: "active",
-    lastReading: "1 min ago",
-    consumption: 1543,
-  },
-  {
-    id: "WM-1007",
-    location: "Building C - Floor 1",
-    status: "warning",
-    lastReading: "45 min ago",
-    consumption: 3241,
-  },
-  {
-    id: "WM-1008",
-    location: "Building E - Floor 2",
-    status: "active",
-    lastReading: "4 min ago",
-    consumption: 892,
-  },
-];
+import { api, type MeterItem } from "@/lib/api";
 
 function getStatusBadge(status: string) {
   switch (status) {
@@ -84,6 +19,39 @@ function getStatusBadge(status: string) {
 }
 
 export function MeterStatus() {
+  const [meters, setMeters] = useState<MeterItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    api
+      .getMeters()
+      .then(setMeters)
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <Card className="p-6">
+        <h3 className="mb-6">Water Meter Status</h3>
+        <div className="space-y-4">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="h-16 bg-muted/50 rounded-lg animate-pulse" />
+          ))}
+        </div>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="p-6 text-destructive">
+        <p>Failed to load meters: {error}</p>
+      </Card>
+    );
+  }
+
   return (
     <Card className="p-6">
       <h3 className="mb-6">Water Meter Status</h3>

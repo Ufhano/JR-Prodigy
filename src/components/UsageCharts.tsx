@@ -1,5 +1,5 @@
-import { Card } from './ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { useEffect, useState } from "react";
+import { Card } from "./ui/card";
 import {
   LineChart,
   Line,
@@ -11,26 +11,42 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-} from 'recharts';
-
-const dailyData = [
-  { date: 'Oct 5', consumption: 42000, target: 45000 },
-  { date: 'Oct 6', consumption: 38000, target: 45000 },
-  { date: 'Oct 7', consumption: 44000, target: 45000 },
-  { date: 'Oct 8', consumption: 41000, target: 45000 },
-  { date: 'Oct 9', consumption: 39000, target: 45000 },
-  { date: 'Oct 10', consumption: 43000, target: 45000 },
-  { date: 'Oct 11', consumption: 40000, target: 45000 },
-];
-
-const zoneData = [
-  { zone: 'Zone A', consumption: 125000, meters: 342 },
-  { zone: 'Zone B', consumption: 98000, meters: 287 },
-  { zone: 'Zone C', consumption: 156000, meters: 421 },
-  { zone: 'Zone D', consumption: 108000, meters: 197 },
-];
+} from "recharts";
+import { api, type DailyChartPoint, type ZoneChartPoint } from "@/lib/api";
 
 export function UsageCharts() {
+  const [dailyData, setDailyData] = useState<DailyChartPoint[]>([]);
+  const [zoneData, setZoneData] = useState<ZoneChartPoint[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    Promise.all([api.getChartsDaily(7), api.getChartsZones()])
+      .then(([daily, zones]) => {
+        setDailyData(daily);
+        setZoneData(zones);
+      })
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="p-6 h-[380px] animate-pulse" />
+        <Card className="p-6 h-[380px] animate-pulse" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="p-6 text-destructive">
+        <p>Failed to load charts: {error}</p>
+      </Card>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <Card className="p-6">

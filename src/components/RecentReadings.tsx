@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Card } from "./ui/card";
 import {
   Table,
@@ -7,54 +8,42 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
-
-interface Reading {
-  meterId: string;
-  location: string;
-  timestamp: string;
-  consumption: number;
-  flowRate: number;
-}
-
-const readings: Reading[] = [
-  {
-    meterId: "WM-1001",
-    location: "Building A - Floor 3",
-    timestamp: "2025-10-11 09:45",
-    consumption: 1245,
-    flowRate: 12.5,
-  },
-  {
-    meterId: "WM-1002",
-    location: "Building B - Floor 1",
-    timestamp: "2025-10-11 09:42",
-    consumption: 987,
-    flowRate: 9.8,
-  },
-  {
-    meterId: "WM-1006",
-    location: "Building B - Floor 3",
-    timestamp: "2025-10-11 09:41",
-    consumption: 1543,
-    flowRate: 15.2,
-  },
-  {
-    meterId: "WM-1004",
-    location: "Building A - Floor 1",
-    timestamp: "2025-10-11 09:38",
-    consumption: 765,
-    flowRate: 7.6,
-  },
-  {
-    meterId: "WM-1008",
-    location: "Building E - Floor 2",
-    timestamp: "2025-10-11 09:35",
-    consumption: 892,
-    flowRate: 8.9,
-  },
-];
+import { api, type ReadingItem } from "@/lib/api";
 
 export function RecentReadings() {
+  const [readings, setReadings] = useState<ReadingItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    api
+      .getReadings()
+      .then(setReadings)
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <Card className="p-6">
+        <h3 className="mb-6">Recent Meter Readings</h3>
+        <div className="space-y-2">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="h-10 bg-muted/50 rounded animate-pulse" />
+          ))}
+        </div>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="p-6 text-destructive">
+        <p>Failed to load readings: {error}</p>
+      </Card>
+    );
+  }
+
   return (
     <Card className="p-6">
       <h3 className="mb-6">Recent Meter Readings</h3>

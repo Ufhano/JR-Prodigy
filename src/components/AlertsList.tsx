@@ -1,60 +1,9 @@
+import { useEffect, useState } from "react";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { ScrollArea } from "./ui/scroll-area";
 import { AlertTriangle, Info, AlertCircle } from "lucide-react";
-
-interface Alert {
-  id: string;
-  type: "critical" | "warning" | "info";
-  message: string;
-  meter: string;
-  time: string;
-}
-
-const alerts: Alert[] = [
-  {
-    id: "1",
-    type: "critical",
-    message: "Abnormal flow rate detected",
-    meter: "WM-1005",
-    time: "5 min ago",
-  },
-  {
-    id: "2",
-    type: "warning",
-    message: "High consumption threshold reached",
-    meter: "WM-1007",
-    time: "15 min ago",
-  },
-  {
-    id: "3",
-    type: "info",
-    message: "Scheduled maintenance required",
-    meter: "WM-1003",
-    time: "1 hour ago",
-  },
-  {
-    id: "4",
-    type: "critical",
-    message: "Connection lost",
-    meter: "WM-1005",
-    time: "2 hours ago",
-  },
-  {
-    id: "5",
-    type: "warning",
-    message: "Battery low",
-    meter: "WM-1012",
-    time: "3 hours ago",
-  },
-  {
-    id: "6",
-    type: "info",
-    message: "Firmware update available",
-    meter: "WM-1001",
-    time: "5 hours ago",
-  },
-];
+import { api, type AlertItem } from "@/lib/api";
 
 function getAlertIcon(type: string) {
   switch (type) {
@@ -83,6 +32,39 @@ function getAlertBadge(type: string) {
 }
 
 export function AlertsList() {
+  const [alerts, setAlerts] = useState<AlertItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    api
+      .getAlerts()
+      .then(setAlerts)
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <Card className="p-6">
+        <h3 className="mb-6">Recent Alerts</h3>
+        <div className="space-y-3">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="h-20 bg-muted/50 rounded-lg animate-pulse" />
+          ))}
+        </div>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="p-6 text-destructive">
+        <p>Failed to load alerts: {error}</p>
+      </Card>
+    );
+  }
+
   return (
     <Card className="p-6">
       <h3 className="mb-6">Recent Alerts</h3>

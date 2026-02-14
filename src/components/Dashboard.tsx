@@ -3,15 +3,17 @@ import { UsageCharts } from "./UsageCharts";
 import { MeterStatus } from "./MeterStatus";
 import { AlertsList } from "./AlertsList";
 import { RecentReadings } from "./RecentReadings";
+import { ApiStatus } from "./ApiStatus";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
 export function Dashboard() {
   return (
     <div className="space-y-8">
-      {/* Stats Overview */}
-      <section>
-        <StatsCards />
-      </section>
+      <ApiStatus>
+        {/* Stats Overview */}
+        <section>
+          <StatsCards />
+        </section>
 
       {/* Tabs for different views */}
       <Tabs defaultValue="overview" className="space-y-6">
@@ -41,6 +43,7 @@ export function Dashboard() {
           <AlertsList />
         </TabsContent>
       </Tabs>
+      </ApiStatus>
     </div>
   );
 }
