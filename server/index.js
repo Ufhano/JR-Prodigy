@@ -1,8 +1,10 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import passport from "passport";
 import { connectDB } from "./config/db.js";
 import { apiRouter } from "./routes/index.js";
+import { authRouter } from "./routes/auth.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -10,8 +12,12 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:3000", credentials: true }));
 app.use(express.json());
+app.use(passport.initialize());
 
-// API routes (will add meters, readings, alerts, auth in next steps)
+// Auth routes (no JWT required)
+app.use("/api/auth", authRouter);
+
+// API routes (protected in apiRouter)
 app.use("/api", apiRouter);
 
 // Health check

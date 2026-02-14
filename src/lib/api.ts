@@ -1,7 +1,11 @@
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const TOKEN_KEY = "jr_prodigy_token";
 
 async function fetchApi<T>(path: string): Promise<T> {
-  const res = await fetch(`${API_URL}${path}`);
+  const token = localStorage.getItem(TOKEN_KEY);
+  const headers: HeadersInit = {};
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  const res = await fetch(`${API_URL}${path}`, { headers });
   if (!res.ok) throw new Error(`API error: ${res.status}`);
   return res.json();
 }

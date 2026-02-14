@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { authMiddleware } from "../config/auth.js";
 import { statsRouter } from "./stats.js";
 import { metersRouter } from "./meters.js";
 import { readingsRouter } from "./readings.js";
@@ -13,6 +14,9 @@ apiRouter.get("/", (_, res) => {
     version: "1.0",
     endpoints: {
       health: "GET /health",
+      "auth/register": "POST /api/auth/register",
+      "auth/login": "POST /api/auth/login",
+      "auth/google": "GET /api/auth/google",
       stats: "GET /api/stats",
       meters: "GET /api/meters",
       readings: "GET /api/readings",
@@ -23,6 +27,8 @@ apiRouter.get("/", (_, res) => {
   });
 });
 
+// All dashboard data requires auth
+apiRouter.use(authMiddleware);
 apiRouter.use("/stats", statsRouter);
 apiRouter.use("/meters", metersRouter);
 apiRouter.use("/readings", readingsRouter);

@@ -31,8 +31,9 @@
 - `src/lib/api.ts` – API client; dashboard components fetch real data
 - StatsCards, MeterStatus, AlertsList, RecentReadings, UsageCharts use API + loading/error states
 
-## Step 4: Authentication
-- Register / login endpoints; JWT in HTTP-only cookie or Authorization header
-- Auth context in React; protect dashboard routes; show Login/Register UI
+## Step 4: Authentication ✅
+- **Backend:** POST /api/auth/register, POST /api/auth/login, GET /api/auth/google, GET /api/auth/google/callback, GET /api/auth/me. JWT in Authorization header. Dashboard API (stats, meters, readings, alerts, charts) requires auth.
+- **Frontend:** Login & Register pages (email + password + “Sign in with Google”). Auth context, protected dashboard, logout in header.
+- **Google OAuth:** Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in server/.env (see server/.env.example). Create OAuth 2.0 credentials at https://console.cloud.google.com/apis/credentials and set redirect URI to `http://localhost:5000/api/auth/google/callback` (or your API_URL + path).
 
 After each step, we can test and then move to the next.
